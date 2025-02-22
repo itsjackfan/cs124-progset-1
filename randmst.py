@@ -4,43 +4,51 @@ from hypercube_graph import HCubeGraph
 from complete_graph_2d import CompleteGraph2D
 from complete_graph_3d import CompleteGraph3D
 from complete_graph_4d import CompleteGraph4D
+import time
 
-numpoints = sys.argv[2]
-numtrials = sys.argv[3]
-dimension = sys.argv[4]
+numpoints = int(sys.argv[2])
+numtrials = int(sys.argv[3])
+dimension = int(sys.argv[4])
 
-if numtrials == 0:
+class UnionFind:
+    def __init__(self):
+        pass
+     
+
+if dimension == 0:
     # create graph
-    graph = CompleteGraph()
-    
+    adj_list = CompleteGraph(numpoints).getAdjList()
+
     # run MST on graph
 
     # calculate averages of weights
 
-elif numtrials == 1:
+elif dimension == 1:
     # create graph
-    graph = HCubeGraph()
+    start_time = time.time()
+    adj_list = HCubeGraph(numpoints).getAdjList()
+    print(time.time() - start_time)
     
     # run MST on graph
 
     # calculate averages of weights
-elif numtrials == 2:
+elif dimension == 2:
     # create graph
-    graph = CompleteGraph2D()
+    graph = CompleteGraph2D(numpoints)
     
     # run MST on graph
 
     # calculate averages of weights
-elif numtrials == 3:
+elif dimension == 3:
     # create graph
-    graph = CompleteGraph3D()
+    graph = CompleteGraph3D(numpoints)
     
     # run MST on graph
 
     # calculate averages of weights
-elif numtrials == 4:
+elif dimension == 4:
     # create graph
-    graph = CompleteGraph4D()
+    graph = CompleteGraph4D(numpoints)
     
     # run MST on graph
 
