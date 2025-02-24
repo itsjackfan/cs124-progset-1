@@ -24,7 +24,7 @@ class UnionFind:
         self.nodes[x] = TreeNode(x)
 
     def union(self, x, y):
-        return self.link(self.find(self.nodes[x]), self.find(self.nodes[y]))
+        return self.link(self.find(x), self.find(y))
 
     def find(self, x):
         if self.nodes[x] != self.nodes[x].parent:
@@ -32,53 +32,82 @@ class UnionFind:
         return self.nodes[x].parent
      
     def link(self, x, y):
-        if self.nodes[x].rank > self.nodes[y].rank:
-            return self.link(self.nodes[y], self.nodes[x])
+        if x.rank > y.rank:
+            return self.link(y, x)
         else:
-            self.nodes[y].rank += 1
-        self.nodes[x].parent = self.nodes[y]
-        return self.nodes[y]
+            y.rank += 1
+        x.parent = y
+        return y
 
-def kruskal(g):
-    pass
+def kruskal(v, e):
+    uf = UnionFind()
+    sorted_edges = dict(sorted(e.items(), key = lambda x:x[1]))
+
+    X = []
+
+    for i in range(v):
+        uf.makeset(i)
+    
+    for edge in sorted_edges:
+        if uf.find(edge[0]) != uf.find(edge[1]):
+            X.append(edge)
+            uf.union(edge[0], edge[1])
+    
+    return X
+
+
 
 if dimension == 0:
     # create graph
     adj_list = CompleteGraph(numpoints).getAdjList()
 
     # run MST on graph
+    MST = kruskal(numpoints, adj_list)
 
-    # calculate averages of weights
+    # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
+    sum = sum(adj_list.get(edge, 0) for edge in MST)
+    print(sum)
 
 elif dimension == 1:
     # create graph
-    start_time = time.time()
     adj_list = HCubeGraph(numpoints).getAdjList()
-    print(time.time() - start_time)
+    print(adj_list)
     
     # run MST on graph
+    MST = kruskal(numpoints, adj_list)
 
-    # calculate averages of weights
+    # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
+    sum = sum(adj_list.get(edge, 0) for edge in MST)
+    print(sum)
 elif dimension == 2:
     # create graph
-    graph = CompleteGraph2D(numpoints)
+    adj_list = CompleteGraph(numpoints).getAdjList()
     
     # run MST on graph
+    MST = kruskal(numpoints, adj_list)
 
-    # calculate averages of weights
+    # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
+    sum = sum(adj_list.get(edge, 0) for edge in MST)
+    print(sum)
 elif dimension == 3:
     # create graph
-    graph = CompleteGraph3D(numpoints)
+    adj_list = CompleteGraph(numpoints).getAdjList()
     
     # run MST on graph
+    MST = kruskal(numpoints, adj_list)
 
-    # calculate averages of weights
+    # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
+    sum = sum(adj_list.get(edge, 0) for edge in MST)
+    print(sum)
 elif dimension == 4:
     # create graph
-    graph = CompleteGraph4D(numpoints)
+    adj_list = CompleteGraph(numpoints).getAdjList()
     
     # run MST on graph
+    MST = kruskal(numpoints, adj_list)
 
-    # calculate averages of weights
+    # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
+    sum = sum(adj_list.get(edge, 0) for edge in MST)
+    print(sum)
 else:
     pass
