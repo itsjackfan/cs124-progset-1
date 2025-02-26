@@ -222,59 +222,80 @@ def kruskal(v, e):
     
     return X
 
-
+weight_sum = 0
 
 if dimension == 0:
     # create graph
-    adj_list = CompleteGraph(numpoints).getAdjList()
+    for _ in range(numtrials):
+        adj_list = CompleteGraph(numpoints).getAdjList()
+        print(adj_list)
 
-    # run MST on graph
-    MST = kruskal(numpoints, adj_list)
+        # run MST on graph
+        MST = kruskal(numpoints, adj_list)
 
-    # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
-    sum = sum(adj_list.get(edge, 0) for edge in MST)
-    print(sum)
+        # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
+        weight_sum += sum(adj_list.get(edge, 0) for edge in MST)
+    
+    avg = weight_sum/numtrials
+    print("AVERAGE WEIGHT: ", avg)
 
 elif dimension == 1:
-    # create graph
-    adj_list = HCubeGraph(numpoints).getAdjList()
-    print(adj_list)
-    
-    # run MST on graph
-    MST = kruskal(numpoints, adj_list)
+    for _ in range(numtrials):
+        # create graph
+        adj_list = HCubeGraph(numpoints).getAdjList()
+        print(adj_list)
+        
+        # run MST on graph
+        MST = kruskal(numpoints, adj_list)
 
-    # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
-    sum = sum(adj_list.get(edge, 0) for edge in MST)
-    print(sum)
+        # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
+        weight_sum += sum(adj_list.get(edge, 0) for edge in MST)
+
+    avg = weight_sum/numtrials
+    print("AVERAGE WEIGHT: ", avg)
+
 elif dimension == 2:
-    # create graph
-    adj_list = CompleteGraph(numpoints).getAdjList()
-    
-    # run MST on graph
-    MST = kruskal(numpoints, adj_list)
+    for i in range(numtrials):
+        # create graph
+        adj_list = CompleteGraph(numpoints).getAdjList()
+        print(adj_list)
+        
+        # run MST on graph
+        MST = kruskal(numpoints, adj_list)
 
-    # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
-    sum = sum(adj_list.get(edge, 0) for edge in MST)
-    print(sum)
+        # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
+        weight_sum += sum(adj_list.get(edge, 0) for edge in MST)
+
+    avg = weight_sum/numtrials
+    print("AVERAGE WEIGHT: ", avg)
+
 elif dimension == 3:
-    # create graph
-    adj_list = CompleteGraph(numpoints).getAdjList()
-    
-    # run MST on graph
-    MST = kruskal(numpoints, adj_list)
+    for i in range(numtrials):
+        # create graph
+        adj_list = CompleteGraph(numpoints).getAdjList()
+        print(adj_list)
+        
+        # run MST on graph
+        MST = kruskal(numpoints, adj_list)
 
-    # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
-    sum = sum(adj_list.get(edge, 0) for edge in MST)
-    print(sum)
+        # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
+        weight_sum += sum(adj_list.get(edge, 0) for edge in MST)
+
+    avg = weight_sum/numtrials
+    print("AVERAGE WEIGHT: ", avg)
 elif dimension == 4:
-    # create graph
-    adj_list = CompleteGraph(numpoints).getAdjList()
-    
-    # run MST on graph
-    MST = kruskal(numpoints, adj_list)
+    for i in range(numtrials):
+        # create graph
+        adj_list = CompleteGraph(numpoints).getAdjList()
+        print(adj_list)
+        
+        # run MST on graph
+        MST = kruskal(numpoints, adj_list)
 
-    # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
-    sum = sum(adj_list.get(edge, 0) for edge in MST)
-    print(sum)
+        # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
+        weight_sum += sum(adj_list.get(edge, 0) for edge in MST)
+    
+    avg = weight_sum/numtrials
+    print("AVERAGE WEIGHT: ", avg)
 else:
     pass
