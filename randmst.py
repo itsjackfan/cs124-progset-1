@@ -117,7 +117,7 @@ class FibonacciHeap:
 
 class MinHeap:
     def __init__(self):
-        self.heap=[]
+        self.heap = []
         self.in_heap = set()
         self.size = 0
 
@@ -141,17 +141,19 @@ class MinHeap:
             self.min_heapify(smallest)
 
     def extract_min(self):
-        if self.size==0:
+        if self.size == 0:
             return None
         
-        min = self.heap[0]
-        self.heap[0] = self.heap.pop()
-        self.in_heap.remove(min[0])
+        min_node = self.heap[0]
+        last = self.heap.pop()
         self.size -= 1
-        self.min_heapify(0)
-
-        return min
         
+        if self.size > 0:
+            self.heap[0] = last
+            self.min_heapify(0)
+            
+        self.in_heap.remove(min_node[0])
+        return min_node
 
     def insert(self, v, weight):
         if v not in self.in_heap:
@@ -160,33 +162,37 @@ class MinHeap:
             self.in_heap.add(v)
             index = self.size - 1
 
-            while index > 0 and self.heap[(index-1)//2][0] > self.heap[index][0]:
+            while index > 0 and self.heap[(index-1)//2][1] > self.heap[index][1]:
                 self.swap(index, (index-1)//2)
                 index = (index-1)//2
-        
+        else:
+            pass
 
-    # Helper functions
     def swap(self, i, j):
-        self.heap[i], self.heap[j]=self.heap[i],self.heap[j]
+        self.heap[i], self.heap[j] = self.heap[j], self.heap[i]
 
 
 def prim(vertices, edges):
     # Adjacency list construction
     adjacency_list = {v: [] for v in vertices}
-    for u, v, w in edges:
+
+    for (u, v), w in edges.items():
         adjacency_list[u].append((v, w))
         adjacency_list[v].append((u, w))
-   
+
     # Initialize
     d = {v: float('inf') for v in vertices}
-    prev={v: None for v in vertices}
+    prev = {v: None for v in vertices}
+
     S = set()
     H = MinHeap()
+
     # Start at s
     source = vertices[0]
     d[source] = 0
     prev[source] = None
     H.insert(source, 0)
+
     mst = []
     mst_weight = 0
 
@@ -198,11 +204,12 @@ def prim(vertices, edges):
             mst.append((prev[u], u, weight))
             mst_weight += weight
 
-        for v, w in adjacency_list[u] and v not in S:
-            if d[v] > w:
+        for v, w in adjacency_list[u]:
+            if v not in S and d[v] > w:
                 d[v] = w
                 prev[v] = u
                 H.insert(v, d[v])
+
     return mst, mst_weight
         
 
@@ -210,92 +217,90 @@ def kruskal(v, e):
     uf = UnionFind()
     sorted_edges = dict(sorted(e.items(), key = lambda x:x[1]))
 
-    X = []
+    X = {}
 
     for i in range(v):
         uf.makeset(i)
     
     for edge in sorted_edges:
         if uf.find(edge[0]) != uf.find(edge[1]):
-            X.append(edge)
+            X[edge] = e[edge]
             uf.union(edge[0], edge[1])
-    
-    return X
 
-weight_sum = 0
+    return X, max(X.values())
+
+kruskal_weight_sum = 0
 
 if dimension == 0:
     # create graph
+    start_time = time.time()
     for _ in range(numtrials):
         adj_list = CompleteGraph(numpoints).getAdjList()
-        print(adj_list)
 
         # run MST on graph
-        MST = kruskal(numpoints, adj_list)
+        MST_kruskal, max_edge_weight = kruskal(numpoints, adj_list)
 
-        # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
-        weight_sum += sum(adj_list.get(edge, 0) for edge in MST)
-    
-    avg = weight_sum/numtrials
-    print("AVERAGE WEIGHT: ", avg)
+        # calculate averages of weights
+        kruskal_weight_sum += sum(adj_list.get(edge, 0) for edge in MST_kruskal)
 
+    kruskal_avg = kruskal_weight_sum/numtrials
+    print(kruskal_avg, numpoints, numtrials, dimension)
 elif dimension == 1:
+    # create graph
+    start_time = time.time()
     for _ in range(numtrials):
-        # create graph
         adj_list = HCubeGraph(numpoints).getAdjList()
-        print(adj_list)
-        
+
         # run MST on graph
-        MST = kruskal(numpoints, adj_list)
+        MST_kruskal, max_edge_weight = kruskal(numpoints, adj_list)
 
-        # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
-        weight_sum += sum(adj_list.get(edge, 0) for edge in MST)
+        # calculate averages of weights
+        kruskal_weight_sum += sum(adj_list.get(edge, 0) for edge in MST_kruskal)
 
-    avg = weight_sum/numtrials
-    print("AVERAGE WEIGHT: ", avg)
+    kruskal_avg = kruskal_weight_sum/numtrials
+    print(kruskal_avg, numpoints, numtrials, dimension)
 
 elif dimension == 2:
-    for i in range(numtrials):
-        # create graph
-        adj_list = CompleteGraph(numpoints).getAdjList()
-        print(adj_list)
-        
+    # create graph
+    start_time = time.time()
+    for _ in range(numtrials):
+        adj_list = CompleteGraph2D(numpoints).getAdjList()
+
         # run MST on graph
-        MST = kruskal(numpoints, adj_list)
+        MST_kruskal, max_edge_weight = kruskal(numpoints, adj_list)
 
-        # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
-        weight_sum += sum(adj_list.get(edge, 0) for edge in MST)
+        # calculate averages of weights
+        kruskal_weight_sum += sum(adj_list.get(edge, 0) for edge in MST_kruskal)
 
-    avg = weight_sum/numtrials
-    print("AVERAGE WEIGHT: ", avg)
-
+    kruskal_avg = kruskal_weight_sum/numtrials
+    print(kruskal_avg, numpoints, numtrials, dimension)
 elif dimension == 3:
-    for i in range(numtrials):
-        # create graph
-        adj_list = CompleteGraph(numpoints).getAdjList()
-        print(adj_list)
-        
+    # create graph
+    start_time = time.time()
+    for _ in range(numtrials):
+        adj_list = CompleteGraph3D(numpoints).getAdjList()
+
         # run MST on graph
-        MST = kruskal(numpoints, adj_list)
+        MST_kruskal, max_edge_weight = kruskal(numpoints, adj_list)
 
-        # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
-        weight_sum += sum(adj_list.get(edge, 0) for edge in MST)
-
-    avg = weight_sum/numtrials
-    print("AVERAGE WEIGHT: ", avg)
-elif dimension == 4:
-    for i in range(numtrials):
-        # create graph
-        adj_list = CompleteGraph(numpoints).getAdjList()
-        print(adj_list)
-        
-        # run MST on graph
-        MST = kruskal(numpoints, adj_list)
-
-        # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
-        weight_sum += sum(adj_list.get(edge, 0) for edge in MST)
+        # calculate averages of weights
+        kruskal_weight_sum += sum(adj_list.get(edge, 0) for edge in MST_kruskal)
     
-    avg = weight_sum/numtrials
-    print("AVERAGE WEIGHT: ", avg)
+    kruskal_avg = kruskal_weight_sum/numtrials
+    print(kruskal_avg, numpoints, numtrials, dimension)
+elif dimension == 4:
+    # create graph
+    start_time = time.time()
+    for _ in range(numtrials):
+        adj_list = CompleteGraph4D(numpoints).getAdjList()
+
+        # run MST on graph
+        MST_kruskal, max_edge_weight = kruskal(numpoints, adj_list)
+
+        # calculate averages of weights
+        kruskal_weight_sum += sum(adj_list.get(edge, 0) for edge in MST_kruskal)
+    
+    kruskal_avg = kruskal_weight_sum/numtrials
+    print(kruskal_avg, numpoints, numtrials, dimension)
 else:
     pass
