@@ -1,4 +1,5 @@
 from random import random
+import math
 
 class CompleteGraph:
     def __init__(self, n):
@@ -10,8 +11,8 @@ class CompleteGraph:
             self.vertices.append(i)
             for j in range(i+1, n):
                 edge_val = random()
-            
-                if edge_val < 20/n:
+                if edge_val < 20 / n:
+                #if edge_val < 0.03*math.log(n)+1:
                     self.adj_list[i].append((j, random()))
                     self.adj_list[j].append((i, random()))
 

@@ -46,15 +46,14 @@ class MinHeap:
         self.in_set = set()
 
     def min_heapify(self, i):
-        left = 2*i + 1
-        right = 2*i + 2
+        left = 2 * i + 1
+        right = 2 * i + 2
         smallest = i
 
         if left < self.size and self.heap[left][1] < self.heap[smallest][1]:
             smallest = left
         if right < self.size and self.heap[right][1] < self.heap[smallest][1]:
             smallest = right
-
         if smallest != i:
             self.swap(i, smallest)
             self.min_heapify(smallest)
@@ -62,16 +61,16 @@ class MinHeap:
     def extract_min(self):
         if self.size == 0:
             return None
-        
+
         min_node = self.heap[0]
         last = self.heap.pop()
         self.size -= 1
         self.in_set.remove(min_node[0])
-        
+
         if self.size > 0:
             self.heap[0] = last
             self.min_heapify(0)
-            
+
         return min_node
 
     def insert(self, v, weight):
@@ -100,13 +99,12 @@ class MinHeap:
 
 
 def prim(vertices, edges):
-   #""""""
-    #vertices: list of the vertices (not just the total number of vertices)
-    #edges: adjacency list in form of dictionary {u: [(v_1,w_1), (v_2,w_2),...],...}
-    #"""
-
+    """
+    vertices: list of the vertices (not just the total number of vertices)
+    edges: adjacency list in form of dictionary {u: [(v_1,w_1), (v_2,w_2),...],...}
+    """
     # Initialize
-    num_points=len(vertices)
+    num_points = len(vertices)
     d = {v: float('inf') for v in vertices}
     prev = {v: None for v in vertices}
 
@@ -133,7 +131,7 @@ def prim(vertices, edges):
             mst.append((prev[u], u))
             mst_weight += weight
 
-        for (v,w) in edges[u]:
+        for (v, w) in edges[u]:
             if v not in S and d[v] > w:
                 d[v] = w
                 prev[v] = u
@@ -154,6 +152,7 @@ def kruskal(v, e):
     for edge in sorted_edges:
         if uf.find(edge[0]) != uf.find(edge[1]):
             X[edge] = e[edge]
+            X[edge] = e[edge]
             uf.union(edge[0], edge[1])
 
     return X, max(X.values())
@@ -166,6 +165,7 @@ prim_weight_sum = 0
 
 if dimension == 0:
     # create graph
+    start_time = time.time()
     start_time = time.time()
     for _ in range(numtrials):
         #adj_list = Complete(numpoints).getAdjList()
@@ -192,6 +192,8 @@ if dimension == 0:
     print(prim_avg, numpoints, numtrials, dimension)
 
 elif dimension == 1:
+    # create graph
+    start_time = time.time()
     # create graph
     start_time = time.time()
     for _ in range(numtrials):
