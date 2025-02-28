@@ -240,6 +240,9 @@ if dimension == 0:
         # run MST on graph
         MST_kruskal, max_edge_weight = kruskal(numpoints, adj_list)
 
+        with open("max_edge_weights.txt", "a") as f:
+            f.write(str(max_edge_weight) + " " + str(numpoints) + "\n")
+
         # calculate averages of weights
         kruskal_weight_sum += sum(adj_list.get(edge, 0) for edge in MST_kruskal)
 

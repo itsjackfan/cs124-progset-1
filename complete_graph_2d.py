@@ -14,7 +14,7 @@ class CompleteGraph2D:
                 if i != j and i < j:
                     dist = ((points[i][0] - points[j][0])**2 + (points[i][1] - points[j][1])**2)**0.5
 
-                    if dist < 0.0003 * n + 0.131:
+                    if dist < 0.07 * n + 3.5:
                         self.adj_list[(i, j)] = dist
     
     def getAdjList(self):

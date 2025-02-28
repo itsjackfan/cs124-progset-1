@@ -14,9 +14,10 @@ namespace GraphGenerators {
     CompleteGraph::CompleteGraph(int n_in) : n(n_in) {
         for (int i = 0; i < n; ++i) {
             for (int j = i + 1; j < n; ++j) {
-                double edge_val = generate_random_weight();
-                if (edge_val < 20.0 / n) {
-                    adj_list[{i, j}] = generate_random_weight();
+                double value = generate_random_weight();
+
+                if (value < 0.3) {
+                    adj_list[{i, j}] = value;
                 }
             }
         }
@@ -31,7 +32,8 @@ namespace GraphGenerators {
             for (int j = 0; j < n; ++j) {
                 if (((i - j) & (i - j - 1)) == 0 && i - j > 0) {
                     double value = generate_random_weight();
-                    if (value < 0.0001 * n + 0.284) {
+
+                    if (value < 0.7) {
                         adj_list[{j, i}] = value;
                     }
                 }
@@ -55,8 +57,9 @@ namespace GraphGenerators {
                     double dist = std::pow(points[i].first - points[j].first, 2) +
                                   std::pow(points[i].second - points[j].second, 2);
                     dist = std::sqrt(dist);
-                    if (dist < 0.0003 * n + 0.131) {
-                        adj_list[{i, j}] = dist;
+
+                    if (dist < 0.2) {
+                        adj_list[{j, i}] = dist;
                     }
                 }
             }
@@ -81,7 +84,7 @@ namespace GraphGenerators {
                                   std::pow(std::get<2>(points[i]) - std::get<2>(points[j]), 2);
                     dist = std::sqrt(dist);
 
-                    if (dist < 0.0002 * n + 0.131) {
+                    if (dist < 0.4) {
                         adj_list[{j, i}] = dist;
                     }
                 }
@@ -109,7 +112,7 @@ namespace GraphGenerators {
                                   std::pow(std::get<3>(points[i]) - std::get<3>(points[j]), 2);
                     dist = std::sqrt(dist);
 
-                    if (dist < 0.0002 * n + 0.135) {
+                    if (dist < 0.6) {
                         adj_list[{j, i}] = dist;
                     }
                 }

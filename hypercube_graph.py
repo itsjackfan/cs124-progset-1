@@ -11,7 +11,7 @@ class HCubeGraph:
                 if (i-j) & (i-j-1) == 0 and i-j > 0:
                     value = random()
 
-                    if value < 0.0001 * n + 0.284:
+                    if value < 0.07 * n + 2.5:
                         self.adj_list[(j, i)] = value
     
     def getAdjList(self):
