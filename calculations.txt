@@ -1,0 +1,27 @@
+Running for Graph Type: 0
+-----------------------------------
+Running for numpoints: 8
+--- Dimension 0 (Complete Graph, Uniform Weights) ---
+Average MST weight: 1.07712 numpoints=8 numtrials=1000 dimension=0
+k(n) value (for p=0.00500): 0.54040 for n=8
+Running for numpoints: 16
+--- Dimension 0 (Complete Graph, Uniform Weights) ---
+Average MST weight: 1.16073 numpoints=16 numtrials=1000 dimension=0
+k(n) value (for p=0.00500): 0.30713 for n=16
+Running for numpoints: 32
+--- Dimension 0 (Complete Graph, Uniform Weights) ---
+Average MST weight: 1.18106 numpoints=32 numtrials=1000 dimension=0
+k(n) value (for p=0.00500): 0.15924 for n=32
+Running for numpoints: 64
+--- Dimension 0 (Complete Graph, Uniform Weights) ---
+Average MST weight: 1.19093 numpoints=64 numtrials=1000 dimension=0
+k(n) value (for p=0.00500): 0.08102 for n=64
+Running for numpoints: 128
+--- Dimension 0 (Complete Graph, Uniform Weights) ---
+Average MST weight: 1.19375 numpoints=128 numtrials=1000 dimension=0
+k(n) value (for p=0.00500): 0.04074 for n=128
+Running for numpoints: 256
+--- Dimension 0 (Complete Graph, Uniform Weights) ---
+Average MST weight: 1.19754 numpoints=256 numtrials=1000 dimension=0
+k(n) value (for p=0.00500): 0.02063 for n=256
+

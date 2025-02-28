@@ -18,7 +18,7 @@ class CompleteGraph2D:
                 if i != j and i < j:
                     dist = ((x_i - x_j)**2 + (y_i - y_j)**2)**0.5
 
-                    if dist < 0.0003 * n + 0.131:
+                    if dist < 0.2:
                         self.adj_list[i].append((j, dist))
                         self.adj_list[j].append((i, dist))
     

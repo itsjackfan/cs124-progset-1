@@ -1,61 +1,96 @@
-#ifndef GRAPHGENERATORS_H
-#define GRAPHGENERATORS_H
+#ifndef GRAPH_GENERATORS_H
+#define GRAPH_GENERATORS_H
 
+#include <vector>
 #include <map>
 #include <random>
-#include <cmath>
-#include <vector>
 
-namespace GraphGenerators {
+// --------------------- CompleteGraph Class ---------------------
+class CompleteGraph {
+public:
+    CompleteGraph(int n);
+    std::map<int, std::vector<std::pair<int, double>>> getAdjList();
+    std::vector<int> getVertices();
+    std::map<std::pair<int, int>, double> getEdgeList();
 
-    // Function to generate a random double between 0 and 1
-    double generate_random_weight();
+private:
+    int num_vertices;
+    std::map<int, std::vector<std::pair<int, double>>> adjList;
+    std::vector<int> vertices;
+    std::map<std::pair<int, int>, double> edgeList;
+    std::mt19937 rng; // Random number generator
+    std::uniform_real_distribution<double> dist; // Distribution for random doubles
+};
 
-    class CompleteGraph {
-    public:
-        int n;
-        std::map<std::pair<int, int>, double> adj_list;
+// --------------------- CompleteGraph2D Class ---------------------
+class CompleteGraph2D {
+public:
+    CompleteGraph2D(int n);
+    std::map<int, std::vector<std::pair<int, double>>> getAdjList();
+    std::vector<int> getVertices();
+    std::map<std::pair<int, int>, double> getEdgeList();
 
-        CompleteGraph(int n_in);
-        std::map<std::pair<int, int>, double> getAdjList();
-    };
+private:
+    int num_vertices;
+    std::map<int, std::vector<std::pair<int, double>>> adjList;
+    std::vector<int> vertices;
+    std::vector<std::pair<double, double>> points;
+    std::map<std::pair<int, int>, double> edgeList;
+    std::mt19937 rng;
+    std::uniform_real_distribution<double> dist;
+};
 
-    class HCubeGraph {
-    public:
-        int n;
-        std::map<std::pair<int, int>, double> adj_list;
+// --------------------- CompleteGraph3D Class ---------------------
+class CompleteGraph3D {
+public:
+    CompleteGraph3D(int n);
+    std::map<int, std::vector<std::pair<int, double>>> getAdjList();
+    std::vector<int> getVertices();
+    std::map<std::pair<int, int>, double> getEdgeList();
 
-        HCubeGraph(int n_in);
-        std::map<std::pair<int, int>, double> getAdjList();
-    };
+private:
+    int num_vertices;
+    std::map<int, std::vector<std::pair<int, double>>> adjList;
+    std::vector<int> vertices;
+    std::vector<std::tuple<double, double, double>> points;
+    std::map<std::pair<int, int>, double> edgeList;
+    std::mt19937 rng;
+    std::uniform_real_distribution<double> dist;
+};
 
-    class CompleteGraph2D {
-    public:
-        int n;
-        std::map<std::pair<int, int>, double> adj_list;
+// --------------------- CompleteGraph4D Class ---------------------
+class CompleteGraph4D {
+public:
+    CompleteGraph4D(int n);
+    std::map<int, std::vector<std::pair<int, double>>> getAdjList();
+    std::vector<int> getVertices();
+    std::map<std::pair<int, int>, double> getEdgeList();
 
-        CompleteGraph2D(int n_in);
-        std::map<std::pair<int, int>, double> getAdjList();
-    };
+private:
+    int num_vertices;
+    std::map<int, std::vector<std::pair<int, double>>> adjList;
+    std::vector<int> vertices;
+    std::vector<std::tuple<double, double, double, double>> points;
+    std::map<std::pair<int, int>, double> edgeList;
+    std::mt19937 rng;
+    std::uniform_real_distribution<double> dist;
+};
 
-    class CompleteGraph3D {
-    public:
-        int n;
-        std::map<std::pair<int, int>, double> adj_list;
+// --------------------- HCubeGraph Class ---------------------
+class HCubeGraph {
+public:
+    HCubeGraph(int n);
+    std::map<int, std::vector<std::pair<int, double>>> getAdjList();
+    std::vector<int> getVertices();
+    std::map<std::pair<int, int>, double> getEdgeList();
 
-        CompleteGraph3D(int n_in);
-        std::map<std::pair<int, int>, double> getAdjList();
-    };
+private:
+    int num_vertices;
+    std::map<int, std::vector<std::pair<int, double>>> adjList;
+    std::vector<int> vertices;
+    std::map<std::pair<int, int>, double> edgeList;
+    std::mt19937 rng;
+    std::uniform_real_distribution<double> dist;
+};
 
-    class CompleteGraph4D {
-    public:
-        int n;
-        std::map<std::pair<int, int>, double> adj_list;
-
-        CompleteGraph4D(int n_in);
-        std::map<std::pair<int, int>, double> getAdjList();
-    };
-
-} // namespace GraphGenerators
-
-#endif
+#endif // GRAPH_GENERATORS_H

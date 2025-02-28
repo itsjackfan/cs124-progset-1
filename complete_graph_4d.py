@@ -18,7 +18,7 @@ class CompleteGraph4D:
                 if i != j and i < j:
                     dist = ((x_i - x_j)**2 + (y_i - y_j)**2 + (z_i - z_j)**2 + (a_i - a_j)**2)**0.5
 
-                    if dist < 0.0002 * n + 0.135:
+                    if dist < 0.6:
                         self.adj_list[i].append((j, dist))
                         self.adj_list[j].append((i, dist))
     

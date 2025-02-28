@@ -12,7 +12,7 @@ class HCubeGraph:
                 if (i-j) & (i-j-1) == 0 and i-j > 0:
                     value = random()
 
-                    if value < 0.0001 * n + 0.284:
+                    if value < 0.7:
                         self.adj_list[i].append((j, value))
                         self.adj_list[j].append((i, value))
     

@@ -140,22 +140,30 @@ def prim(vertices, edges):
     return mst, mst_weight
 
 
-def kruskal(v, e):
+def kruskal(vertices, edges):
     uf = UnionFind()
-    sorted_edges = dict(sorted(e.items(), key = lambda x:x[1]))
+    all_edges = {}
+    for u in edges:
+        for v, weight in edges[u]:
+            if (u, v) not in all_edges and (v, u) not in all_edges:
+                all_edges[(u, v)] = weight
+
+    sorted_edges = dict(sorted(all_edges.items(), key=lambda x: x[1]))
 
     X = {}
 
-    for i in range(v):
-        uf.makeset(i)
-    
-    for edge in sorted_edges:
-        if uf.find(edge[0]) != uf.find(edge[1]):
-            X[edge] = e[edge]
-            X[edge] = e[edge]
-            uf.union(edge[0], edge[1])
+    for v in vertices:
+        uf.makeset(v)
 
-    return X, max(X.values())
+    mst_weight = 0
+    for edge, weight in sorted_edges.items():
+        u, v = edge
+        if uf.find(u) != uf.find(v):
+            X[edge] = weight
+            mst_weight += weight
+            uf.union(u, v)
+
+    return X, mst_weight
 
 kruskal_weight_sum = 0
 prim_weight_sum = 0
@@ -205,19 +213,19 @@ elif dimension == 1:
         # run MST on graph
         #print("Adj_list: ", adj_list)
         #print("Vertices: ", vertices)
-        #MST_kruskal, max_edge_weight = kruskal(numpoints, adj_list)
+        # MST_kruskal, max_edge_weight = kruskal(vertices, adj_list)
         MST_prim, prim_weight = prim(vertices, adj_list)
         
         #print("Kruskal:", MST_kruskal)
         #print("Prim:", MST_prim)
 
         # calculate averages of weights
-        #kruskal_weight_sum += sum(adj_list.get(edge, 0) for edge in MST_kruskal)
+        # kruskal_weight_sum += sum(adj_list.get(edge, 0) for edge in MST_kruskal)
         prim_weight_sum += prim_weight
 
-    #kruskal_avg = kruskal_weight_sum / numtrials
+    # kruskal_avg = kruskal_weight_sum / numtrials
     prim_avg = prim_weight_sum / numtrials
-    #print(kruskal_avg, numpoints, numtrials, dimension)
+    # print(kruskal_avg, numpoints, numtrials, dimension)
     print(prim_avg, numpoints, numtrials, dimension)
 
 elif dimension == 2:
