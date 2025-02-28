@@ -38,264 +38,266 @@ class UnionFind:
             y.rank += 1
         x.parent = y
         return y
-    
-"""
-class FibonaciNode:
-    def __init__(self,key):
-        self.key = key
-        self.parent = None
-        self.child = None
-        self.left = self
-        self.right = self
-        self.degree = 0
-        self.mark = False
-
-class FibonacciHeap:
-    def __init__(self):
-        self.min_node = None
-        self.num_nodes = 0
-    
-    def create(self):
-        self.min_node = None
-        self.num_nodes = 0
-
-    def insert(self, x):
-        node = FibonaciNode(x)
-        if self.min_node is None:
-            self.min_node = node
-        else:
-            self._add_node_to_root_list(node, self.min_node)
-            if node.key < self.min_node.key:
-                self.min_node = node
-        self.num_nodes += 1
-        return node
-    
-    def find_min(self):
-        return self.min_node
-    
-    def delete_min(self):
-        x = self.min_node
-        if x is not None:
-            if x.child is not None:
-                children=[]
-                child = x.child
-                while True:
-                    children.append(child)
-                    child=child.right
-                    if child == x.child:
-                        break
-                for child in children:
-                    self._add_node_to_root_list(child, x)
-                    child.parent = None
-
-            self._remove_node_from_root_list(x)
-            if x == x.right:
-                self.min_node = None
-            else:
-                self.min_node = x.right
-                self._consolidate()
-            self.num_nodes -= 1
-        return x
-
-    # Helper functions
-    def _add_node_to_root_list(self, node, root):
-        node.left = root
-        node.right = root.right
-        root.right.left = node
-        root.right = node
-
-    def _remove_node_from_root_list(self, node):
-        node.left.right = node.right
-        node.right.left = node.left
-
-    def _consolidate(self):
-        A = [None] * self.num_nodes
-        nodes = []
-
-    """
-        
 
 class MinHeap:
     def __init__(self):
-        self.heap=[]
-        self.in_heap = set()
+        self.heap = []
         self.size = 0
-
-    def build_heap(self, A):
-        self.heap = A[:]
-        self.size=len(self.heap)
-        for i in range(self.size//2-1,-1,-1):
-            self.min_heapify(i)
+        self.in_set = set()
 
     def min_heapify(self, i):
-        left = 2*i+1
-        right = 2*i+2
-        smallest=i
+        left = 2*i + 1
+        right = 2*i + 2
+        smallest = i
 
-        if left<self.size and self.heap[left][0]<self.heap[smallest][0]:
-            smallest=left
-        if right < self.size and self.heap[right][0] < self.heap[smallest][0]:
+        if left < self.size and self.heap[left][1] < self.heap[smallest][1]:
+            smallest = left
+        if right < self.size and self.heap[right][1] < self.heap[smallest][1]:
             smallest = right
+
         if smallest != i:
             self.swap(i, smallest)
             self.min_heapify(smallest)
 
     def extract_min(self):
-        if self.size==0:
+        if self.size == 0:
             return None
         
-        min = self.heap[0]
-        self.heap[0] = self.heap.pop()
-        self.in_heap.remove(min[0])
+        min_node = self.heap[0]
+        last = self.heap.pop()
         self.size -= 1
-        self.min_heapify(0)
-
-        return min
+        self.in_set.remove(min_node[0])
         
+        if self.size > 0:
+            self.heap[0] = last
+            self.min_heapify(0)
+            
+        return min_node
 
     def insert(self, v, weight):
-        if v not in self.in_heap:
-            self.size += 1
+        if v in self.in_set:
+            for i in range(self.size):
+                if self.heap[i][0] == v and self.heap[i][1] > weight:
+                    self.heap[i] = (v, weight)
+                    self.heapify_up(i)
+                    return
+        else:
             self.heap.append((v, weight))
-            self.in_heap.add(v)
-            index = self.size - 1
+            self.size += 1
+            self.in_set.add(v)
+            self.heapify_up(self.size - 1)
 
-            while index > 0 and self.heap[(index-1)//2][0] > self.heap[index][0]:
-                self.swap(index, (index-1)//2)
-                index = (index-1)//2
-        
+    def heapify_up(self, i):
+        parent = (i - 1) // 2
+        while i > 0 and self.heap[parent][1] > self.heap[i][1]:
+            self.swap(i, parent)
+            i = parent
+            parent = (i - 1) // 2
 
-    # Helper functions
     def swap(self, i, j):
-        self.heap[i], self.heap[j]=self.heap[i],self.heap[j]
+        self.heap[i], self.heap[j] = self.heap[j], self.heap[i]
+
 
 
 def prim(vertices, edges):
-    # Adjacency list construction
-    adjacency_list = {v: [] for v in vertices}
-    for u, v, w in edges:
-        adjacency_list[u].append((v, w))
-        adjacency_list[v].append((u, w))
-   
+   #""""""
+    #vertices: list of the vertices (not just the total number of vertices)
+    #edges: adjacency list in form of dictionary {u: [(v_1,w_1), (v_2,w_2),...],...}
+    #"""
+
     # Initialize
+    num_points=len(vertices)
     d = {v: float('inf') for v in vertices}
-    prev={v: None for v in vertices}
+    prev = {v: None for v in vertices}
+
     S = set()
     H = MinHeap()
-    # Start at s
+
+    # Start at source
     source = vertices[0]
     d[source] = 0
     prev[source] = None
     H.insert(source, 0)
+
     mst = []
     mst_weight = 0
 
     while H.size > 0:
         u, weight = H.extract_min()
+        if u in S:
+            continue
+
         S.add(u)
-        
+
         if prev[u] is not None:
-            mst.append((prev[u], u, weight))
+            mst.append((prev[u], u))
             mst_weight += weight
 
-        for v, w in adjacency_list[u] and v not in S:
-            if d[v] > w:
+        for (v,w) in edges[u]:
+            if v not in S and d[v] > w:
                 d[v] = w
                 prev[v] = u
-                H.insert(v, d[v])
+                H.insert(v, w)
+
     return mst, mst_weight
-        
+
 
 def kruskal(v, e):
     uf = UnionFind()
     sorted_edges = dict(sorted(e.items(), key = lambda x:x[1]))
 
-    X = []
+    X = {}
 
     for i in range(v):
         uf.makeset(i)
     
     for edge in sorted_edges:
         if uf.find(edge[0]) != uf.find(edge[1]):
-            X.append(edge)
+            X[edge] = e[edge]
             uf.union(edge[0], edge[1])
-    
-    return X
 
-weight_sum = 0
+    return X, max(X.values())
+
+kruskal_weight_sum = 0
+prim_weight_sum = 0
+
+#numtrials=60
+
 
 if dimension == 0:
     # create graph
+    start_time = time.time()
     for _ in range(numtrials):
-        adj_list = CompleteGraph(numpoints).getAdjList()
-        print(adj_list)
+        #adj_list = Complete(numpoints).getAdjList()
+        graph = CompleteGraph(numpoints)
+        adj_list = graph.getAdjList()
+        vertices = graph.getVertices()
 
         # run MST on graph
-        MST = kruskal(numpoints, adj_list)
+        #print("Adj_list: ", adj_list)
+        #print("Vertices: ", vertices)
+        #MST_kruskal, max_edge_weight = kruskal(numpoints, adj_list)
+        MST_prim, prim_weight = prim(vertices, adj_list)
+        
+        #print("Kruskal:", MST_kruskal)
+        #print("Prim:", MST_prim)
 
-        # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
-        weight_sum += sum(adj_list.get(edge, 0) for edge in MST)
-    
-    avg = weight_sum/numtrials
-    print("AVERAGE WEIGHT: ", avg)
+        # calculate averages of weights
+        #kruskal_weight_sum += sum(adj_list.get(edge, 0) for edge in MST_kruskal)
+        prim_weight_sum += prim_weight
+
+    #kruskal_avg = kruskal_weight_sum / numtrials
+    prim_avg = prim_weight_sum / numtrials
+    #print(kruskal_avg, numpoints, numtrials, dimension)
+    print(prim_avg, numpoints, numtrials, dimension)
 
 elif dimension == 1:
+    # create graph
+    start_time = time.time()
     for _ in range(numtrials):
-        # create graph
-        adj_list = HCubeGraph(numpoints).getAdjList()
-        print(adj_list)
-        
+        #adj_list = HCubeGraph(numpoints).getAdjList()
+        graph = HCubeGraph(numpoints)
+        adj_list = graph.getAdjList()
+        vertices = graph.getVertices()
+
         # run MST on graph
-        MST = kruskal(numpoints, adj_list)
+        #print("Adj_list: ", adj_list)
+        #print("Vertices: ", vertices)
+        #MST_kruskal, max_edge_weight = kruskal(numpoints, adj_list)
+        MST_prim, prim_weight = prim(vertices, adj_list)
+        
+        #print("Kruskal:", MST_kruskal)
+        #print("Prim:", MST_prim)
 
-        # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
-        weight_sum += sum(adj_list.get(edge, 0) for edge in MST)
+        # calculate averages of weights
+        #kruskal_weight_sum += sum(adj_list.get(edge, 0) for edge in MST_kruskal)
+        prim_weight_sum += prim_weight
 
-    avg = weight_sum/numtrials
-    print("AVERAGE WEIGHT: ", avg)
+    #kruskal_avg = kruskal_weight_sum / numtrials
+    prim_avg = prim_weight_sum / numtrials
+    #print(kruskal_avg, numpoints, numtrials, dimension)
+    print(prim_avg, numpoints, numtrials, dimension)
 
 elif dimension == 2:
-    for i in range(numtrials):
-        # create graph
-        adj_list = CompleteGraph(numpoints).getAdjList()
-        print(adj_list)
-        
+    # create graph
+    start_time = time.time()
+    for _ in range(numtrials):
+        #adj_list = CompleteGraph2D(numpoints).getAdjList()
+        graph = CompleteGraph2D(numpoints)
+        adj_list = graph.getAdjList()
+        vertices = graph.getVertices()
+
         # run MST on graph
-        MST = kruskal(numpoints, adj_list)
+        #print("Adj_list: ", adj_list)
+        #print("Vertices: ", vertices)
+        #MST_kruskal, max_edge_weight = kruskal(numpoints, adj_list)
+        MST_prim, prim_weight = prim(vertices, adj_list)
+        
+        #print("Kruskal:", MST_kruskal)
+        #print("Prim:", MST_prim)
 
-        # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
-        weight_sum += sum(adj_list.get(edge, 0) for edge in MST)
+        # calculate averages of weights
+        #kruskal_weight_sum += sum(adj_list.get(edge, 0) for edge in MST_kruskal)
+        prim_weight_sum += prim_weight
 
-    avg = weight_sum/numtrials
-    print("AVERAGE WEIGHT: ", avg)
+    #kruskal_avg = kruskal_weight_sum / numtrials
+    prim_avg = prim_weight_sum / numtrials
+    #print(kruskal_avg, numpoints, numtrials, dimension)
+    print(prim_avg, numpoints, numtrials, dimension)
 
 elif dimension == 3:
-    for i in range(numtrials):
-        # create graph
-        adj_list = CompleteGraph(numpoints).getAdjList()
-        print(adj_list)
+    # create graph
+    start_time = time.time()
+    for _ in range(numtrials):
+        #adj_list = CompleteGraph3D(numpoints).getAdjList()
+        graph = CompleteGraph3D(numpoints)
+        adj_list = graph.getAdjList()
+        vertices = graph.getVertices()
+
+       # run MST on graph
+        #print("Adj_list: ", adj_list)
+        #print("Vertices: ", vertices)
+        #MST_kruskal, max_edge_weight = kruskal(numpoints, adj_list)
+        MST_prim, prim_weight = prim(vertices, adj_list)
         
-        # run MST on graph
-        MST = kruskal(numpoints, adj_list)
+        #print("Kruskal:", MST_kruskal)
+        #print("Prim:", MST_prim)
 
-        # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
-        weight_sum += sum(adj_list.get(edge, 0) for edge in MST)
+        # calculate averages of weights
+        #kruskal_weight_sum += sum(adj_list.get(edge, 0) for edge in MST_kruskal)
+        prim_weight_sum += prim_weight
 
-    avg = weight_sum/numtrials
-    print("AVERAGE WEIGHT: ", avg)
+    #kruskal_avg = kruskal_weight_sum / numtrials
+    prim_avg = prim_weight_sum / numtrials
+    #print(kruskal_avg, numpoints, numtrials, dimension)
+    print(prim_avg, numpoints, numtrials, dimension)
+
 elif dimension == 4:
-    for i in range(numtrials):
-        # create graph
-        adj_list = CompleteGraph(numpoints).getAdjList()
-        print(adj_list)
-        
-        # run MST on graph
-        MST = kruskal(numpoints, adj_list)
+    # create graph
+    start_time = time.time()
+    for _ in range(numtrials):
+        #adj_list = CompleteGraph4D(numpoints).getAdjList()
+        graph = CompleteGraph4D(numpoints)
+        adj_list = graph.getAdjList()
+        vertices = graph.getVertices()
 
-        # calculate averages of weights -- currently a placeholder for sum cuz we probably want to run multiple trials
-        weight_sum += sum(adj_list.get(edge, 0) for edge in MST)
-    
-    avg = weight_sum/numtrials
-    print("AVERAGE WEIGHT: ", avg)
+        # run MST on graph
+        #print("Adj_list: ", adj_list)
+        #print("Vertices: ", vertices)
+        #MST_kruskal, max_edge_weight = kruskal(numpoints, adj_list)
+        MST_prim, prim_weight = prim(vertices, adj_list)
+        
+        #print("Kruskal:", MST_kruskal)
+        #print("Prim:", MST_prim)
+
+        # calculate averages of weights
+        #kruskal_weight_sum += sum(adj_list.get(edge, 0) for edge in MST_kruskal)
+        prim_weight_sum += prim_weight
+
+    #kruskal_avg = kruskal_weight_sum / numtrials
+    prim_avg = prim_weight_sum / numtrials
+    #print(kruskal_avg, numpoints, numtrials, dimension)
+    print(prim_avg, numpoints, numtrials, dimension)
+
 else:
     pass

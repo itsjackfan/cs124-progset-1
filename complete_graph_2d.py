@@ -3,16 +3,27 @@ from random import random
 class CompleteGraph2D:
     def __init__(self, n):
         self.n = n
-        self.adj_list = {}
+        self.adj_list = { i: [] for i in range(n) }
+        self.vertices = list(range(n))
 
         points = []
         for i in range(n):
+            self.vertices.append(i)
             points.append((random(), random()))
         
         for i in range(n):
+            x_i,y_i = points[i]
             for j in range(n):
+                x_j,y_j = points[j]
                 if i != j and i < j:
-                    self.adj_list[(j, i)] = ((points[i][0] - points[j][0])**2 + (points[i][1] - points[j][1])**2)**0.5
+                    dist = ((x_i - x_j)**2 + (y_i - y_j)**2)**0.5
+
+                    if dist < 0.0003 * n + 0.131:
+                        self.adj_list[i].append((j, dist))
+                        self.adj_list[j].append((i, dist))
     
     def getAdjList(self):
         return self.adj_list
+    
+    def getVertices(self):
+        return self.vertices
